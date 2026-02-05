@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Jogo Silábico Divertido</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #e6f7ff;
+    text-align: center;
+}
+h1 {
+    color: #2b7cff;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+.botao {
+    font-size: 26px;
+    padding: 15px;
+    margin: 6px;
+    cursor: pointer;
+    border-radius: 12px;
+    border: none;
+    background: #ffd966;
+}
+.botao:hover {
+    background: #ffb703;
+}
+.palavra {
+    font-size: 36px;
+    margin: 20px;
+    min-height: 50px;
+}
+.imagem {
+    font-size: 80px;
+}
+.frase {
+    font-size: 28px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+<h1>🎲 Jogo Silábico Divertido</h1>
+
+<div class="container">
+
+<h2>Vogais</h2>
+<div id="vogais"></div>
+
+<h2>Sílabas</h2>
+<div id="silabas"></div>
+
+<h2>Palavra formada</h2>
+<div class="palavra" id="palavra"></div>
+
+<div class="imagem" id="imagem">🖼️</div>
+<div class="frase" id="frase"></div>
+
+<button class="botao" onclick="limpar()">🔄 Limpar</button>
+
+</div>
+
+<script>
+const vogais = ["A","E","I","O","U","Á","É","Í","Ó","Ú","Ã","Õ","Â","Ê","Ô"];
+const silabas = ["BA","BE","BI","BO","BU","MA","ME","MI","MO","MU","PA","PE","PI","PO","PU"];
+
+const imagens = {
+    "BOLA": "⚽",
+    "BALA": "🍬",
+    "MALA": "🧳",
+    "PATO": "🦆",
+    "MAMA": "👩‍👧",
+    "BEBÊ": "👶"
+};
+
+let palavraAtual = "";
+
+function falar(texto) {
+    const voz = new SpeechSynthesisUtterance(texto);
+    voz.lang = "pt-BR";
+    speechSynthesis.speak(voz);
+}
+
+function criarBotoes(lista, destino) {
+    lista.forEach(item => {
+        const btn = document.createElement("button");
+        btn.innerText = item;
+        btn.className = "botao";
+        btn.onclick = () => {
+            palavraAtual += item;
+            document.getElementById("palavra").innerText = palavraAtual;
+            falar(item);
+            verificarPalavra();
+        };
+        destino.appendChild(btn);
+    });
+}
+
+function verificarPalavra() {
+    const palavra = palavraAtual.toUpperCase();
+    if (imagens[palavra]) {
+        document.getElementById("imagem").innerText = imagens[palavra];
+        document.getElementById("frase").innerText = "EU VEJO " + palavra;
+        falar("Eu vejo " + palavra);
+    }
+}
+
+function limpar() {
+    palavraAtual = "";
+    document.getElementById("palavra").innerText = "";
+    document.getElementById("imagem").innerText = "🖼️";
+    document.getElementById("frase").innerText = "";
+}
+
+criarBotoes(vogais, document.getElementById("vogais"));
+criarBotoes(silabas, document.getElementById("silabas"));
+</script>
+
+</body>
+</html>
